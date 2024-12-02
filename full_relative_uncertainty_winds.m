@@ -1,10 +1,15 @@
 %% This function will take alpha, beta, inertial velocity and euler angle 
 % data and return relative uncertainty in the wind vectors 
-function [e_wu, e_wv, e_ww] = full_relative_uncertainty_winds(data);
+function [e_wu, e_wv, e_ww] = full_relative_uncertainty_winds(data)
 
-e_theta = data.Absolute_pitch./data.pitch;
-e_psi = data.Absolute_yaw./data.yaw;
-e_phi = data.Absolute_roll./data.roll;
+% 
+% e_theta = data.vn_pitch_unc./data.pitch;
+% e_psi = data.vn_yaw_unc./data.yaw;
+% e_phi = data.vn_roll_unc./data.roll;
+e_psi = data.Absolute_yaw./data.yaw;  
+e_theta = data.Absolute_pitch./data.pitch; 
+e_phi = data.Absolute_roll./data.roll; % 
+
 
 e_Alpha = data.e_Alpha;
 e_Beta = data.e_Beta;
@@ -18,7 +23,7 @@ Beta   = data.beta;
 Theta  = data.pitch;
 Psi    = data.yaw;
 Phi    = data.roll;
-vx     = data.vy; % Note we flip x and y to get the correct corrdinate system here
+vx     = data.vy; % Note we flip x and y to get the correct coordinate system here
 vy     = data.vx; 
 vz     = data.vz; % vz is already negative so we don't worry about it here
 

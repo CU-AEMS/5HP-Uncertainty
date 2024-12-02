@@ -31,13 +31,13 @@ load(Coeff_Uncertain_File);
 
 %%
 % synchronize all the data
-% Since there were different onboard insturments it's important to make
-% sure all the data is aligned. Syncronized to the insturment with the
-% slowest data aquisition rate (in this case the VectorNAV-300.
+% Since there were different onboard instruments, it is important to make
+% sure all the data is aligned. Synchronize to the instrument with the
+% slowest data aquisition rate (in this case the VectorNAV-300):
 
 % MHP Pressure values values
 data.P0=interp1(miniflux.mhp.sample_time,miniflux.mhp.dynamic_press_0,miniflux.vn.sample_time);
-% inlcude offset from calibration
+% include offset from calibration
 data.P0=data.P0+P0_offset;
 data.P1=interp1(miniflux.mhp.sample_time,miniflux.mhp.dynamic_press_1,miniflux.vn.sample_time);
 data.P2=interp1(miniflux.mhp.sample_time,miniflux.mhp.dynamic_press_2,miniflux.vn.sample_time);
@@ -68,6 +68,12 @@ data.agl        = data.alt - mean(data.alt(1)); % Above ground level  (assuming 
 data.roll_rate  = miniflux.vn.ang_rates_x;
 data.pitch_rate = miniflux.vn.ang_rates_y;
 data.yaw_rate = miniflux.vn.ang_rates_z;
+% vn - reported uncertainties
+ data.vn_yaw_unc = miniflux.vn.yaw_unc;
+ data.vn_pitch_unc = miniflux.vn.pitch_unc;
+ data.vn_roll_unc = miniflux.vn.roll_unc;
+ data.vn_pos_unc = miniflux.vn.pos_unc;
+
 
 data.vy = miniflux.vn.vel_y; % y inertial velocity
 data.vx = miniflux.vn.vel_x;% x inertial velocity
@@ -264,7 +270,7 @@ data.more_certain = intersect(data.more_certain,data.inFlight);
 
 % First a summary of the flight
    
-   figure(100); subplot(1,2,1); hold on; grid minor;
+   figure(200); subplot(1,2,1); hold on; grid minor;
    xlabel('Longitude (degrees)'); ylabel('Latitude (degrees)'); zlabel('Altitude (m)');title('Flight Path');
    scatter3(data.lon(data.inFlight),data.lat(data.inFlight),data.alt(data.inFlight),ones(1,length(data.inFlight)),data.timeflight(data.inFlight));
    C = colorbar; C.Label.String ='Flight Time (minutes)'; axis equal;
@@ -288,7 +294,7 @@ color33 = [255/256 196/256 47/256];
 
 
  
-figure(100); hold on;
+figure(300); hold on;
    
 time_conf = [data.timeflight(data.more_certain);data.timeflight(data.more_certain(end:-1:1))];   
 axx1 = subplot(3,1,1); hold on; grid minor; plot(data.timeflight(data.more_certain),data.wu(data.more_certain),'.','color',color1); 
